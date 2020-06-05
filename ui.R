@@ -1,7 +1,7 @@
 
 shinyUI(fluidPage(
 
-    titlePanel("Ripetibilità e Riproducibilità di metodi qualitativi"),
+    titlePanel("Metodi qualitativi: Ripetibilità e Riproducibilità"),
 
     # Sidebar with a slider input for number of bins
     sidebarLayout(

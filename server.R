@@ -22,10 +22,6 @@ shinyServer(function(input, output) {
 
     
     
-    # dt() %>% 
-        # round(select(-mp, -s, -k),0))
-    
-    
     s2_r<-reactive(sum(dt()$p*(1-dt()$p))/dt()$k)
         
     s2_L<-reactive((sum((dt()$p-mean(dt()$p)^2))/(dt()$k-1)))

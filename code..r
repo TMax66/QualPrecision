@@ -3,6 +3,7 @@ library(tidyverse)
 library(knitr)
 library(kableExtra)
  
+dati <- read_excel("~/Scrivania/Quali.xlsx")
 
 dt<-dati %>% 
   filter(mp=="MP00/001") %>% 
@@ -10,7 +11,7 @@ dt<-dati %>%
   discard(~all(is.na(.x))) %>% 
   mutate(s = rowSums(select(., starts_with("r")))) %>%
   mutate(k=n()) %>% 
-  mutate(pi=s/ncol(select(dt, starts_with("r"))))
+  mutate(pi=s/ncol(select(dati, starts_with("r"))))
 
 
 #repliche<-ncol(select(dt, starts_with("r")))
