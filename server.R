@@ -4,23 +4,31 @@ shinyServer(function(input, output) {
 
     dt<-reactive(
         dati %>% 
+            mutate_at(vars(starts_with("r")),list(as.integer)) %>% 
         filter(mp==input$mp) %>% 
             discard(~all(is.na(.x))) %>% 
             mutate(s = rowSums(select(., starts_with("r")))) %>%
             mutate(k=n()) %>% 
-            mutate(pi=s/ncol(select(dati, starts_with("r"))))
+            mutate(p=s/ncol(select(dati, starts_with("r"))))
     )
 
      
     repliche<-reactive(ncol(select(dati, starts_with("r"))))
-    P<-reactive(mean(dt()$pi))
+    P<-reactive(mean(dt()$p))
     
-    output$t<-renderTable(dt())
+    output$t<-renderTable(dt() %>% 
+                              select(-mp,-s, -k)
+                          )
+
     
     
-    s2_r<-reactive(sum(dt()$pi*(1-dt()$pi))/dt()$k)
+    # dt() %>% 
+        # round(select(-mp, -s, -k),0))
+    
+    
+    s2_r<-reactive(sum(dt()$p*(1-dt()$p))/dt()$k)
         
-    s2_L<-reactive((sum((dt()$pi-mean(dt()$pi)^2))/(dt()$k-1)))
+    s2_L<-reactive((sum((dt()$p-mean(dt()$p)^2))/(dt()$k-1)))
     
     s2_R<-reactive(s2_r()+s2_L())
     
@@ -31,8 +39,8 @@ shinyServer(function(input, output) {
     output$r<-renderText(sd_R())
     
     output$tt<-renderTable(
-    t<-round(tibble("P"=P(), s2_r(),
-                     s2_L(),s2_R(),sd_r(),sd_R(), "r"=2*sd_r(),
+    t<-round(tibble("P"=P(), "sr"=s2_r(),
+                     "sL"=s2_L(),"sR"=s2_R(),"sd_r"=sd_r(),"sd_R"=sd_R(), "r"=2*sd_r(),
                   "R"=2*sd_R()),2) %>%slice(1)
    )
     

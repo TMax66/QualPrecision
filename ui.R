@@ -13,6 +13,7 @@ shinyUI(fluidPage(
         mainPanel(
             tableOutput("t"),
             br(),hr(),
+            
            tableOutput("tt")
         )
     )
